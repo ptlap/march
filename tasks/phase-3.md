@@ -12,10 +12,12 @@ Goal: Add the keyboard-first launcher with rofi-wayland.
 6. Start with app launching only.
 7. Add command/script entries after app launching is stable.
 8. Keep launcher config independent from End-4.
+9. Provide a fuzzel fallback while rofi-wayland is not installed.
 
 ## Done When
 
 - Super + Space opens rofi.
+- If rofi-wayland is not installed, Super + Space opens the fuzzel fallback.
 - App search is fast and keyboard-first.
 - Rofi visually matches the bar.
 - No End-4 rofi config is required.

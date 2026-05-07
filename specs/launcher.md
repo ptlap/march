@@ -1,6 +1,6 @@
 # march Launcher Spec
 
-Launcher: rofi-wayland
+Launcher: rofi-wayland, with fuzzel fallback until rofi-wayland is installed.
 
 ## Style
 
