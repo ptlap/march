@@ -1,12 +1,12 @@
-# macrch Blueprint
+# march Blueprint
 
-macrch is a standalone Arch Linux desktop rice built from scratch with
+march is a standalone Arch Linux desktop rice built from scratch with
 Hyprland and Quickshell. End-4 is only a reference for ideas and fallback, not a
 runtime dependency.
 
 ## Goal
 
-- Build a separate config named `macrch`.
+- Build a separate config named `march`.
 - Keep Hyprland as the window manager.
 - Write the shell/bar in Quickshell.
 - Use only a top bar, no dock.
@@ -23,10 +23,10 @@ End-4 currently runs its shell with:
 qs -c ii
 ```
 
-macrch will run its shell with:
+march will run its shell with:
 
 ```sh
-qs -c macrch
+qs -c march
 ```
 
 Development switching should work like this:
@@ -34,29 +34,29 @@ Development switching should work like this:
 ```sh
 pkill qs
 hyprctl reload
-qs -c macrch
+qs -c march
 ```
 
-Permanent switching should happen only after the macrch shell is stable:
+Permanent switching should happen only after the march shell is stable:
 
 ```ini
 # old End-4 shell
 # exec-once = qs -c ii
 
-# macrch shell
-exec-once = qs -c macrch
+# march shell
+exec-once = qs -c march
 ```
 
-End-4 should remain installed as a fallback until macrch can fully replace the
+End-4 should remain installed as a fallback until march can fully replace the
 daily desktop.
 
 ## Repository Layout
 
 ```text
-macrch/
+march/
   docs/               planning and rules
-  hypr/               Hyprland config layer for macrch
-  quickshell/macrch/  Quickshell shell config loaded by `qs -c macrch`
+  hypr/               Hyprland config layer for march
+  quickshell/march/  Quickshell shell config loaded by `qs -c march`
   kitty/              kitty theme and transparency config
   rofi/               rofi-wayland launcher theme and scripts
   scripts/            start, install, restore, theme, wallpaper helpers
@@ -69,7 +69,7 @@ generated, copied, or symlinked from here later by install scripts.
 
 ## Desktop Shape
 
-The first usable macrch desktop should include:
+The first usable march desktop should include:
 
 - A 32px top bar.
 - 16px rounding.
@@ -104,7 +104,7 @@ Right zone:
 
 ## Theme System
 
-Theme generation should be owned by macrch.
+Theme generation should be owned by march.
 
 Inputs:
 
@@ -141,12 +141,25 @@ Later features:
 
 ## Switching and Recovery
 
-Required scripts:
+Direct manual switching:
 
-- `scripts/start-macrch.sh`: stop the current Quickshell process and start
-  macrch.
-- `scripts/restore-end4.sh`: stop macrch and start End-4 shell with `qs -c ii`.
-- `scripts/install.sh`: install or link macrch config into `~/.config` later.
+```sh
+pkill qs
+qs -c march
+```
+
+Fallback to End-4:
+
+```sh
+pkill qs
+qs -c ii
+```
+
+For `qs -c march` to work, the runtime config must exist at:
+
+```text
+~/.config/quickshell/march/shell.qml
+```
 
 Never remove End-4 automatically. Switching should be reversible.
 
@@ -154,11 +167,11 @@ Never remove End-4 automatically. Switching should be reversible.
 
 The first milestone is not a full rice. It is a bootable shell foundation:
 
-- `qs -c macrch` opens a visible top bar.
+- `qs -c march` opens a visible top bar.
 - Bar has left, center, and right zones.
 - Hyprland blur and rounding are configured.
 - Kitty can load a transparent theme.
 - Rofi has a matching basic theme.
 - Start and restore scripts work.
 
-After this milestone, macrch can grow one module at a time.
+After this milestone, march can grow one module at a time.

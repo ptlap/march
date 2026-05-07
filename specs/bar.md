@@ -1,4 +1,4 @@
-# macrch Bar Spec
+# march Bar Spec
 
 Technology: Quickshell/QML
 

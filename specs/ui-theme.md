@@ -1,6 +1,6 @@
-# macrch UI Theme
+# march UI Theme
 
-Name: macrch Glass Hybrid
+Name: march Glass Hybrid
 
 ## Style
 

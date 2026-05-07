@@ -1,6 +1,6 @@
-# macrch Code Rules
+# march Code Rules
 
-These rules apply to all code and config added to macrch.
+These rules apply to all code and config added to march.
 
 ## Independence
 
@@ -9,7 +9,7 @@ These rules apply to all code and config added to macrch.
 - Do not reference `~/.config/quickshell/ii`.
 - Do not reference End-4 helper script paths.
 - If an End-4 behavior is useful, reimplement it inside this repo.
-- Keep macrch runnable even when End-4 is disabled.
+- Keep march runnable even when End-4 is disabled.
 
 ## Scope
 
@@ -22,7 +22,7 @@ These rules apply to all code and config added to macrch.
 ## Structure
 
 - Put Hyprland config under `hypr/`.
-- Put Quickshell code under `quickshell/macrch/`.
+- Put Quickshell code under `quickshell/march/`.
 - Put kitty config under `kitty/`.
 - Put rofi config under `rofi/`.
 - Put shell helpers under `scripts/`.
@@ -40,7 +40,7 @@ These rules apply to all code and config added to macrch.
 
 ## Hyprland
 
-- Keep macrch config as its own layer.
+- Keep march config as its own layer.
 - Avoid editing the live End-4 Hyprland config directly.
 - Prefer readable `.conf` files grouped by purpose.
 - Validate with `Hyprland --verify-config` when possible.
@@ -64,7 +64,7 @@ set -euo pipefail
 
 ## Theme Code
 
-- Theme generation must write macrch-owned files only.
+- Theme generation must write march-owned files only.
 - Keep generated files separate from templates where practical.
 - A wallpaper change should be able to regenerate Quickshell, Hyprland, kitty,
   and rofi colors without End-4.
@@ -85,15 +85,15 @@ set -euo pipefail
 Before treating a milestone as done, run the relevant checks:
 
 ```sh
-Hyprland --verify-config -c hypr/macrch.conf
-qmllint quickshell/macrch
+Hyprland --verify-config -c hypr/march.conf
+find quickshell/march -name '*.qml' -print -exec qmllint {} \;
 ```
 
 Runtime checks:
 
 ```sh
-scripts/start-macrch.sh
-qs -c macrch
+pkill qs
+qs -c march
 ```
 
 If a runtime check fails because of the current session environment, record the

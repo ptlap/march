@@ -1,4 +1,4 @@
-# macrch
+# march
 
 Custom Arch Linux rice using Hyprland + Quickshell.
 

@@ -1,6 +1,6 @@
-# Codex Instructions for macrch
+# Codex Instructions for march
 
-You are working on macrch, a custom Arch Linux rice.
+You are working on march, a custom Arch Linux rice.
 
 Rules:
 

@@ -1,6 +1,6 @@
 # Phase 1 Tasks
 
-Goal: Build minimal working macrch shell.
+Goal: Build minimal working march shell.
 
 ## Tasks
 

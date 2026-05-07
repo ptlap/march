@@ -1,4 +1,4 @@
-# macrch Launcher Spec
+# march Launcher Spec
 
 Launcher: rofi-wayland
 

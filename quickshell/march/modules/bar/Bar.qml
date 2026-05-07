@@ -23,7 +23,7 @@ Scope {
             implicitHeight: root.theme.barWindowHeight
             exclusiveZone: root.theme.barWindowHeight
             exclusionMode: ExclusionMode.Normal
-            WlrLayershell.namespace: "quickshell:macrch:bar"
+            WlrLayershell.namespace: "quickshell:march:bar"
             WlrLayershell.layer: WlrLayer.Top
 
             anchors {

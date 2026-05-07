@@ -1,6 +1,6 @@
-# macrch Theme
+# march Theme
 
-This is the fixed visual direction for macrch before dynamic wallpaper theming
+This is the fixed visual direction for march before dynamic wallpaper theming
 is added.
 
 ## Direction
