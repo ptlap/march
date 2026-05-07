@@ -35,3 +35,6 @@ to remember:
 ```text
 > apps  ! system  @ theme/wallpaper  # workspace  ? help
 ```
+
+Bare `Super` is not part of the launcher. It is reserved for the future
+window/workspace overview described in `specs/overview.md`.

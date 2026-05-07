@@ -10,7 +10,7 @@ unfinished clone of End-4.
 3. `phase-3.md`: rofi-wayland launcher.
 4. `phase-4.md`: kitty transparency and theme.
 5. `phase-5.md`: wallpaper and dynamic colors.
-6. `phase-6.md`: daily desktop controls.
+6. `phase-6.md`: daily desktop controls and window overview.
 
 ## Working Rules
 
@@ -20,3 +20,4 @@ unfinished clone of End-4.
 - Prefer direct, keyboard-first tools.
 - Keep screenshots local; do not commit image files from `screenshots/`.
 - Keep rollback simple: `pkill qs && qs -c ii`.
+- Reserve bare `Super` for the future window/workspace overview.
