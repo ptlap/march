@@ -12,7 +12,7 @@ RowLayout {
         ? Hyprland.focusedMonitor.activeWorkspace.id : 1
     property var workspaceApps: ({})
 
-    spacing: 3
+    spacing: 2
 
     Repeater {
         model: 5
@@ -25,10 +25,10 @@ RowLayout {
             readonly property string appIcon: root.workspaceApps[workspaceId] || ""
             readonly property bool occupied: appIcon.length > 0 || Hyprland.workspaces.values.some(ws => ws.id === workspaceId)
 
-            Layout.preferredWidth: active ? 32 : 26
+            Layout.preferredWidth: active ? 30 : 24
             Layout.preferredHeight: 24
             radius: 12
-            color: active ? root.theme.barActive : (mouse.containsMouse ? root.theme.barHover : (occupied ? "#14ffffff" : "transparent"))
+            color: active ? root.theme.barActive : (mouse.containsMouse ? root.theme.barHover : (occupied ? "#10ffffff" : "transparent"))
             border.width: active ? 1 : (occupied ? 1 : 0)
             border.color: active ? root.theme.accent : root.theme.glassBorder
             antialiasing: true

@@ -17,7 +17,7 @@ Item {
     readonly property int activeWorkspace: Hyprland.focusedMonitor && Hyprland.focusedMonitor.activeWorkspace
         ? Hyprland.focusedMonitor.activeWorkspace.id : 1
     readonly property string activeTitle: activeToplevel && activeToplevel.title
-        ? activeToplevel.title : `Workspace ${activeWorkspace}`
+        ? activeToplevel.title : ""
 
     RowLayout {
         anchors {
@@ -33,7 +33,7 @@ Item {
 
         Components.GlassIsland {
             Layout.preferredHeight: root.theme.barHeight
-            Layout.preferredWidth: Math.min(560, Math.max(360, leftContent.implicitWidth + 22))
+            Layout.preferredWidth: Math.min(430, leftContent.implicitWidth + 22)
             theme: root.theme
 
             RowLayout {
@@ -63,6 +63,7 @@ Item {
                 }
 
                 Rectangle {
+                    visible: root.activeTitle.length > 0
                     Layout.preferredWidth: 1
                     Layout.preferredHeight: 16
                     radius: 1
@@ -72,14 +73,15 @@ Item {
                 }
 
                 Text {
+                    visible: root.activeTitle.length > 0
                     text: root.activeTitle
                     color: root.theme.textMuted
                     font.family: root.theme.uiFont
                     font.pixelSize: 12
                     elide: Text.ElideRight
                     verticalAlignment: Text.AlignVCenter
-                    Layout.fillWidth: true
-                    Layout.maximumWidth: 230
+                    Layout.preferredWidth: Math.min(180, implicitWidth)
+                    Layout.maximumWidth: 180
                     Layout.alignment: Qt.AlignVCenter
                 }
             }

@@ -5,3 +5,5 @@ state/
 tmp/
 *.bak
 *.swp
+screenshots/*
+!screenshots/.gitkeep
