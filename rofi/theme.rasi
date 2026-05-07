@@ -21,9 +21,9 @@ window {
     anchor: center;
     border: 1px;
     border-color: @glass-border;
-    border-radius: 18px;
-    background-color: @glass-bg;
-    padding: 12px;
+    border-radius: 20px;
+    background-color: rgba(17, 20, 28, 78%);
+    padding: 14px;
 }
 
 mainbox {
@@ -34,11 +34,11 @@ mainbox {
 
 inputbar {
     spacing: 10px;
-    padding: 10px 12px;
+    padding: 11px 13px;
     border: 1px;
     border-color: @glass-border;
-    border-radius: 14px;
-    background-color: rgba(255, 255, 255, 7%);
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 8%);
     children: [prompt, entry];
 }
 
@@ -64,14 +64,14 @@ listview {
 }
 
 element {
-    padding: 8px 10px;
+    padding: 8px 11px;
     border-radius: 12px;
     background-color: transparent;
     text-color: @text-muted;
 }
 
 element selected {
-    background-color: rgba(138, 173, 244, 22%);
+    background-color: rgba(138, 173, 244, 24%);
     text-color: @text;
 }
 

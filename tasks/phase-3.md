@@ -12,12 +12,13 @@ Goal: Add the keyboard-first launcher with rofi-wayland.
 6. Make Super + Space a march command palette, not a duplicate of Super.
 7. Keep app launching available from the palette.
 8. Keep launcher config independent from End-4.
-9. Provide a fuzzel fallback while rofi-wayland is not installed.
+9. Use prefix commands: `>`, `!`, `@`, `#`, `?`.
+10. Show a small footer explaining prefix meanings.
 
 ## Done When
 
 - Super + Space opens rofi.
-- If rofi-wayland is not installed, Super + Space opens the fuzzel fallback.
+- The command palette shows prefix hints at the bottom.
 - App search is fast and keyboard-first.
 - Rofi visually matches the bar.
 - No End-4 rofi config is required.

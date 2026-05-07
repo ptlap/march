@@ -1,0 +1,32 @@
+configuration {
+    show-icons: false;
+    font: "Inter 12";
+    kb-row-up: "Up,Control+k";
+    kb-row-down: "Down,Control+j";
+    kb-accept-entry: "Return,KP_Enter";
+    kb-remove-to-eol: "Control+Shift+e";
+}
+
+@theme "theme.rasi"
+
+window {
+    width: 640px;
+}
+
+entry {
+    placeholder: "Command palette";
+}
+
+listview {
+    lines: 10;
+}
+
+message {
+    padding: 8px 10px 0px 10px;
+    background-color: transparent;
+}
+
+textbox {
+    text-color: @text-dim;
+    font: "Inter 10";
+}

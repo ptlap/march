@@ -2,57 +2,101 @@
 set -euo pipefail
 
 repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-fuzzel_config="$repo_dir/fuzzel/fuzzel.ini"
-rofi_config="$repo_dir/rofi/config.rasi"
+palette_config="$repo_dir/rofi/command-palette.rasi"
+apps_config="$repo_dir/rofi/app-launcher.rasi"
+prefix_help="> apps  ! system  @ theme/wallpaper  # workspace  ? help"
+
+require_rofi() {
+    if ! command -v rofi >/dev/null 2>&1; then
+        notify-send "march launcher" "rofi is not installed" 2>/dev/null || true
+        exit 1
+    fi
+}
 
 pick() {
     printf '%s\n' \
-        "Apps" \
-        "Reload Hyprland" \
-        "Restart march shell" \
-        "Kill Quickshell" \
-        "Restore End-4 shell" \
-        "Wallpaper picker" \
-        "Theme picker" \
-        "Open march repo" |
-        fuzzel --dmenu \
-            --config "$fuzzel_config" \
-            --prompt "march " \
-            --placeholder "Command palette"
+        "> apps" \
+        "> kitty" \
+        "> files" \
+        "! reload hyprland" \
+        "! restart march" \
+        "! kill quickshell" \
+        "! restore end4" \
+        "! lock" \
+        "! suspend" \
+        "@ wallpaper picker" \
+        "@ theme picker" \
+        "@ random wallpaper" \
+        "# workspace 1" \
+        "# workspace 2" \
+        "# workspace 3" \
+        "# workspace 4" \
+        "# workspace 5" \
+        "# workspace 6" \
+        "# workspace 7" \
+        "# workspace 8" \
+        "# workspace 9" \
+        "# workspace 10" \
+        "? help" \
+        "? keybinds" \
+        "? open march repo" |
+        rofi -dmenu \
+            -config "$palette_config" \
+            -p "march" \
+            -mesg "$prefix_help"
 }
 
 open_apps() {
-    if command -v rofi >/dev/null 2>&1; then
-        exec rofi -show drun -config "$rofi_config"
-    fi
-
-    exec fuzzel --config "$fuzzel_config"
+    exec rofi -show drun -config "$apps_config"
 }
 
+require_rofi
 selection="$(pick || true)"
 
 case "$selection" in
-    "Apps")
+    "> apps")
         open_apps
         ;;
-    "Reload Hyprland")
+    "> kitty")
+        kitty >/tmp/march-kitty.log 2>&1 &
+        ;;
+    "> files")
+        xdg-open "$HOME" >/tmp/march-files.log 2>&1 &
+        ;;
+    "! reload hyprland")
         hyprctl reload
         ;;
-    "Restart march shell")
+    "! restart march")
         pkill qs 2>/dev/null || true
         qs -c march >/tmp/qs-march.log 2>&1 &
         ;;
-    "Kill Quickshell")
+    "! kill quickshell")
         pkill qs 2>/dev/null || true
         ;;
-    "Restore End-4 shell")
+    "! restore end4")
         pkill qs 2>/dev/null || true
         qs -c ii >/tmp/qs-ii.log 2>&1 &
         ;;
-    "Wallpaper picker" | "Theme picker")
-        notify-send "march" "$selection is planned for a later phase" 2>/dev/null || true
+    "! lock")
+        loginctl lock-session
         ;;
-    "Open march repo")
+    "! suspend")
+        systemctl suspend || loginctl suspend
+        ;;
+    "@ wallpaper picker" | "@ theme picker" | "@ random wallpaper")
+        notify-send "march" "${selection#@ } is planned for a later phase" 2>/dev/null || true
+        ;;
+    "# workspace "*)
+        workspace="${selection##* }"
+        hyprctl dispatch workspace "$workspace"
+        ;;
+    "? help")
+        notify-send "march prefixes" "$prefix_help" 2>/dev/null || true
+        ;;
+    "? keybinds")
+        xdg-open "$HOME/.config/hypr/custom/keybinds.conf" >/tmp/march-keybinds.log 2>&1 &
+        ;;
+    "? open march repo")
         kitty --working-directory "$repo_dir" 2>/dev/null &
         ;;
 esac
