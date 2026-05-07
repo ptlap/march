@@ -1,0 +1,18 @@
+configuration {
+    modi: "drun,run";
+    show-icons: true;
+    icon-theme: "Papirus-Dark";
+    display-drun: "Apps";
+    display-run: "Run";
+    drun-display-format: "{name}";
+    font: "Inter 12";
+    terminal: "kitty";
+    kb-row-up: "Up,Control+k";
+    kb-row-down: "Down,Control+j";
+    kb-accept-entry: "Return,KP_Enter";
+    kb-remove-to-eol: "Control+Shift+e";
+    kb-mode-next: "Shift+Right,Control+Tab";
+    kb-mode-previous: "Shift+Left,Control+ISO_Left_Tab";
+}
+
+@theme "theme.rasi"

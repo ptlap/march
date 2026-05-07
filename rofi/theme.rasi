@@ -1,0 +1,102 @@
+* {
+    bg: #0B0D12;
+    surface: rgba(24, 27, 36, 52%);
+    glass-bg: rgba(17, 20, 28, 58%);
+    glass-border: rgba(255, 255, 255, 13%);
+    glass-highlight: rgba(255, 255, 255, 18%);
+    text: #F2F4F8;
+    text-muted: #A8B0C0;
+    text-dim: #6F7787;
+    accent: #8AADF4;
+    accent-2: #C6A0F6;
+
+    background-color: transparent;
+    text-color: @text;
+    font: "Inter 12";
+}
+
+window {
+    width: 680px;
+    location: center;
+    anchor: center;
+    border: 1px;
+    border-color: @glass-border;
+    border-radius: 18px;
+    background-color: @glass-bg;
+    padding: 12px;
+}
+
+mainbox {
+    spacing: 10px;
+    padding: 0px;
+    background-color: transparent;
+}
+
+inputbar {
+    spacing: 10px;
+    padding: 10px 12px;
+    border: 1px;
+    border-color: @glass-border;
+    border-radius: 14px;
+    background-color: rgba(255, 255, 255, 7%);
+    children: [prompt, entry];
+}
+
+prompt {
+    text-color: @accent;
+    font: "Symbols Nerd Font 15";
+}
+
+entry {
+    placeholder: "Search apps";
+    placeholder-color: @text-dim;
+    text-color: @text;
+    cursor-color: @accent;
+}
+
+listview {
+    lines: 8;
+    columns: 1;
+    fixed-height: true;
+    dynamic: true;
+    spacing: 4px;
+    background-color: transparent;
+}
+
+element {
+    padding: 8px 10px;
+    border-radius: 12px;
+    background-color: transparent;
+    text-color: @text-muted;
+}
+
+element selected {
+    background-color: rgba(138, 173, 244, 22%);
+    text-color: @text;
+}
+
+element-icon {
+    size: 22px;
+    margin: 0px 10px 0px 0px;
+}
+
+element-text {
+    vertical-align: 0.5;
+}
+
+mode-switcher {
+    spacing: 6px;
+    background-color: transparent;
+}
+
+button {
+    padding: 6px 10px;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 6%);
+    text-color: @text-muted;
+}
+
+button selected {
+    background-color: rgba(198, 160, 246, 20%);
+    text-color: @text;
+}

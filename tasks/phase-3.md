@@ -11,6 +11,7 @@ Goal: Add the keyboard-first launcher with rofi-wayland.
 5. Bind launcher target to Super + Space in the march Hyprland config.
 6. Start with app launching only.
 7. Add command/script entries after app launching is stable.
+8. Keep launcher config independent from End-4.
 
 ## Done When
 
