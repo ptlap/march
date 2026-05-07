@@ -1,0 +1,7 @@
+*.log
+*.cache
+.cache/
+state/
+tmp/
+*.bak
+*.swp
