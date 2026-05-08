@@ -5,6 +5,7 @@ import Quickshell
 
 import "modules/background" as Background
 import "modules/bar" as Bar
+import "modules/overview" as Overview
 import "services" as Services
 import "styles" as Styles
 
@@ -31,6 +32,10 @@ ShellRoot {
         id: wallpaper
     }
 
+    Services.HyprlandData {
+        id: hyprlandData
+    }
+
     Background.Background {
         theme: theme
         wallpaper: wallpaper
@@ -41,5 +46,10 @@ ShellRoot {
         audio: audio
         battery: battery
         network: network
+    }
+
+    Overview.Overview {
+        theme: theme
+        hyprlandData: hyprlandData
     }
 }
