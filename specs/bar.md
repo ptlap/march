@@ -11,6 +11,12 @@ Left island:
 - If workspace has an app, show an app icon.
 - Active window title.
 
+Wallpaper island:
+
+- Small wallpaper icon with accent dot.
+- Click opens wallpaper menu with local, previous, online O/K/W, and theme actions.
+- Keep separate from workspace island so tray/system monitors can grow later.
+
 Center island:
 
 - Clock.

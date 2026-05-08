@@ -87,6 +87,17 @@ Item {
             }
         }
 
+        Components.GlassIsland {
+            Layout.preferredHeight: root.theme.barHeight
+            Layout.preferredWidth: 52
+            theme: root.theme
+
+            OnlineWallpaperButtons {
+                anchors.centerIn: parent
+                theme: root.theme
+            }
+        }
+
         Item {
             Layout.fillWidth: true
         }

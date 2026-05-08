@@ -41,7 +41,14 @@ pick() {
         "@ current wallpaper" \
         "@ previous wallpaper" \
         "@ open wallpaper folder" \
+        "@ wallpaper menu" \
+        "@ online osu seasonal" \
+        "@ online konachan safe" \
+        "@ online wallhaven onepiece" \
         "@ theme picker" \
+        "@ theme dynamic" \
+        "@ theme fallback" \
+        "@ theme status" \
         "# workspace 1" \
         "# workspace 2" \
         "# workspace 3" \
@@ -114,8 +121,29 @@ case "$selection" in
     "@ open wallpaper folder")
         "$repo_dir/scripts/wallpaper.sh" --open-folder
         ;;
+    "@ wallpaper menu")
+        "$repo_dir/scripts/wallpaper.sh" --wallpaper-menu
+        ;;
     "@ theme picker")
-        notify-send "march" "theme picker is planned after generated colors are stable" 2>/dev/null || true
+        "$repo_dir/scripts/wallpaper.sh" --theme-picker
+        ;;
+    "@ theme dynamic")
+        "$repo_dir/scripts/wallpaper.sh" --theme-dynamic
+        ;;
+    "@ theme fallback")
+        "$repo_dir/scripts/wallpaper.sh" --theme-fallback
+        ;;
+    "@ theme status")
+        "$repo_dir/scripts/wallpaper.sh" --theme-status
+        ;;
+    "@ online osu seasonal")
+        "$repo_dir/scripts/wallpaper.sh" --online osu
+        ;;
+    "@ online konachan safe")
+        "$repo_dir/scripts/wallpaper.sh" --online konachan
+        ;;
+    "@ online wallhaven onepiece")
+        "$repo_dir/scripts/wallpaper.sh" --online wallhaven-onepiece
         ;;
     "# workspace "*)
         workspace="${selection##* }"
