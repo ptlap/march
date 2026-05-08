@@ -12,11 +12,13 @@ Goal: Add wallpaper management and dynamic theme generation.
 6. Apply generated colors to rofi.
 7. Apply generated colors to kitty.
 8. Add online wallpaper support only after local wallpaper flow works.
+9. Add lightweight current/previous wallpaper management before favorites.
 
 ## Done When
 
 - A local wallpaper can be selected and applied.
 - `@ wallpaper picker` and `@ random wallpaper` work from the rofi palette.
+- `@ current wallpaper`, `@ previous wallpaper`, and `@ open wallpaper folder` work from the rofi palette.
 - Wallpaper display is owned by march through a Quickshell background layer, not End-4 or a required external daemon.
 - Generated `march-colors.json` can override Quickshell colors.
 - Generated `rofi-colors.rasi` can override rofi command palette/app launcher colors.

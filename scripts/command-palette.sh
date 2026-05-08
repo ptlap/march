@@ -37,8 +37,11 @@ pick() {
         "! lock" \
         "! suspend" \
         "@ wallpaper picker" \
-        "@ theme picker" \
         "@ random wallpaper" \
+        "@ current wallpaper" \
+        "@ previous wallpaper" \
+        "@ open wallpaper folder" \
+        "@ theme picker" \
         "# workspace 1" \
         "# workspace 2" \
         "# workspace 3" \
@@ -101,6 +104,15 @@ case "$selection" in
         ;;
     "@ random wallpaper")
         "$repo_dir/scripts/wallpaper.sh" --random
+        ;;
+    "@ current wallpaper")
+        "$repo_dir/scripts/wallpaper.sh" --current
+        ;;
+    "@ previous wallpaper")
+        "$repo_dir/scripts/wallpaper.sh" --previous
+        ;;
+    "@ open wallpaper folder")
+        "$repo_dir/scripts/wallpaper.sh" --open-folder
         ;;
     "@ theme picker")
         notify-send "march" "theme picker is planned after generated colors are stable" 2>/dev/null || true

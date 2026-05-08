@@ -6,6 +6,8 @@ state_dir="$repo_dir/state"
 generated_dir="$repo_dir/themes/generated"
 palette_config="$repo_dir/rofi/command-palette.rasi"
 wallpaper_dirs="${MARCH_WALLPAPER_DIRS:-$repo_dir/wallpapers:$HOME/Pictures/Wallpapers}"
+current_wallpaper="$state_dir/current-wallpaper"
+wallpaper_history="$state_dir/wallpaper-history"
 matugen_json="$generated_dir/matugen.json"
 march_colors_json="$generated_dir/march-colors.json"
 rofi_colors="$generated_dir/rofi-colors.rasi"
@@ -17,6 +19,9 @@ Usage:
   wallpaper.sh --pick
   wallpaper.sh --random
   wallpaper.sh --apply <image>
+  wallpaper.sh --current
+  wallpaper.sh --previous
+  wallpaper.sh --open-folder
   wallpaper.sh --generate-theme
 
 Environment:
@@ -38,6 +43,11 @@ notify_applied() {
     fi
 
     notify-send -i "$image" "march wallpaper" "$message" 2>/dev/null || printf '%b\n' "$message" >&2
+}
+
+current_image() {
+    [[ -f "$current_wallpaper" ]] || return 1
+    sed -n '1p' "$current_wallpaper"
 }
 
 ensure_dirs() {
@@ -93,6 +103,72 @@ random_wallpaper() {
     fi
 
     apply_wallpaper "$selected"
+}
+
+show_current_wallpaper() {
+    local image accent
+
+    image="$(current_image || true)"
+    if [[ -z "$image" || ! -f "$image" ]]; then
+        notify "No current wallpaper"
+        exit 1
+    fi
+
+    accent=""
+    if [[ -f "$march_colors_json" ]] && command -v jq >/dev/null 2>&1; then
+        accent="$(jq -r '.accent // empty' "$march_colors_json" 2>/dev/null || true)"
+    fi
+
+    notify_applied "$image" "$accent"
+}
+
+open_current_wallpaper_folder() {
+    local image
+
+    image="$(current_image || true)"
+    if [[ -z "$image" || ! -f "$image" ]]; then
+        notify "No current wallpaper"
+        exit 1
+    fi
+
+    xdg-open "$(dirname "$image")" >/tmp/march-wallpaper-folder.log 2>&1 &
+}
+
+remember_wallpaper() {
+    local image="$1"
+
+    [[ -n "$image" && -f "$image" ]] || return 0
+    {
+        printf '%s\n' "$image"
+        if [[ -f "$wallpaper_history" ]]; then
+            grep -Fxv -- "$image" "$wallpaper_history" || true
+        fi
+    } | sed -n '1,20p' > "$wallpaper_history.tmp"
+    mv "$wallpaper_history.tmp" "$wallpaper_history"
+}
+
+previous_wallpaper() {
+    local previous current
+
+    previous="$(sed -n '1p' "$wallpaper_history" 2>/dev/null || true)"
+    if [[ -z "$previous" || ! -f "$previous" ]]; then
+        notify "No previous wallpaper"
+        exit 1
+    fi
+
+    current="$(current_image || true)"
+    if [[ -n "$current" && -f "$current" && "$current" != "$previous" ]]; then
+        {
+            printf '%s\n' "$current"
+            grep -Fxv -- "$previous" "$wallpaper_history" 2>/dev/null | grep -Fxv -- "$current" || true
+        } | sed '/^$/d' | sed -n '1,20p' > "$wallpaper_history.tmp"
+        mv "$wallpaper_history.tmp" "$wallpaper_history"
+    else
+        sed '1d' "$wallpaper_history" > "$wallpaper_history.tmp"
+        mv "$wallpaper_history.tmp" "$wallpaper_history"
+    fi
+
+    apply_wallpaper "$previous" --no-history
 }
 
 generate_palette() {
@@ -282,6 +358,7 @@ EOF
 
 apply_wallpaper() {
     local image="$1"
+    local mode="${2:-}"
 
     if [[ ! -f "$image" ]]; then
         notify "Wallpaper not found: $image"
@@ -290,7 +367,13 @@ apply_wallpaper() {
 
     ensure_dirs
 
-    printf '%s\n' "$image" > "$state_dir/current-wallpaper"
+    local previous=""
+    previous="$(current_image || true)"
+    if [[ "$mode" != "--no-history" && -n "$previous" && "$previous" != "$image" ]]; then
+        remember_wallpaper "$previous"
+    fi
+
+    printf '%s\n' "$image" > "$current_wallpaper"
 
     if command -v awww >/dev/null 2>&1; then
         awww img "$image" \
@@ -326,6 +409,15 @@ main() {
                 exit 2
             }
             apply_wallpaper "$2"
+            ;;
+        --current)
+            show_current_wallpaper
+            ;;
+        --previous)
+            previous_wallpaper
+            ;;
+        --open-folder)
+            open_current_wallpaper_folder
             ;;
         --generate-theme)
             write_generated_palette
