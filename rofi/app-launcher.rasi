@@ -13,6 +13,8 @@ configuration {
     kb-remove-to-eol: "Control+Shift+e";
     kb-mode-next: "Shift+Right,Control+Tab";
     kb-mode-previous: "Shift+Left,Control+ISO_Left_Tab";
+    click-to-exit: true;
+    steal-focus: true;
 }
 
 @theme "theme.rasi"

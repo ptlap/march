@@ -5,6 +5,8 @@ configuration {
     kb-row-down: "Down,Control+j";
     kb-accept-entry: "Return,KP_Enter";
     kb-remove-to-eol: "Control+Shift+e";
+    click-to-exit: true;
+    steal-focus: true;
 }
 
 @theme "theme.rasi"
