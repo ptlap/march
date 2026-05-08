@@ -21,4 +21,5 @@ Goal: Add the keyboard-first launcher with rofi-wayland.
 - The command palette shows prefix hints at the bottom.
 - App search is fast and keyboard-first.
 - Rofi visually matches the bar.
+- Rofi Wayland does not reliably close on outside click; `Esc` is accepted.
 - No End-4 rofi config is required.

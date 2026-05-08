@@ -10,6 +10,7 @@ Goal: Add kitty theme and terminal transparency.
 4. Add the fallback color palette from `docs/theme.md`.
 5. Create a simple manual theme picker plan before implementing automation.
 6. Keep generated theme files separate from handwritten config.
+7. Add a command/script to open kitty with the march config.
 
 ## Done When
 

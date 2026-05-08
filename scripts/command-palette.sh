@@ -58,7 +58,7 @@ case "$selection" in
         open_apps
         ;;
     "> kitty")
-        kitty >/tmp/march-kitty.log 2>&1 &
+        "$repo_dir/scripts/open-kitty.sh" >/tmp/march-kitty.log 2>&1 &
         ;;
     "> files")
         xdg-open "$HOME" >/tmp/march-files.log 2>&1 &
