@@ -16,6 +16,10 @@ Goal: Add wallpaper management and dynamic theme generation.
 ## Done When
 
 - A local wallpaper can be selected and applied.
+- `@ wallpaper picker` and `@ random wallpaper` work from the rofi palette.
+- Wallpaper display is owned by march through a Quickshell background layer, not End-4 or a required external daemon.
+- Generated `march-colors.json` can override Quickshell colors.
+- Generated `rofi-colors.rasi` can override rofi command palette/app launcher colors.
 - Quickshell, rofi, and kitty can share the generated palette.
 - The fallback theme still works if generation fails.
 - No generated file writes into End-4 paths.

@@ -3,6 +3,7 @@
 
 import Quickshell
 
+import "modules/background" as Background
 import "modules/bar" as Bar
 import "services" as Services
 import "styles" as Styles
@@ -24,6 +25,15 @@ ShellRoot {
 
     Services.Network {
         id: network
+    }
+
+    Services.Wallpaper {
+        id: wallpaper
+    }
+
+    Background.Background {
+        theme: theme
+        wallpaper: wallpaper
     }
 
     Bar.Bar {

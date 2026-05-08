@@ -7,3 +7,5 @@ tmp/
 *.swp
 screenshots/*
 !screenshots/.gitkeep
+themes/generated/*
+!themes/generated/.gitkeep

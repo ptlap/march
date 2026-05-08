@@ -100,3 +100,5 @@ button selected {
     background-color: rgba(198, 160, 246, 20%);
     text-color: @text;
 }
+
+@import "../themes/generated/rofi-colors.rasi"

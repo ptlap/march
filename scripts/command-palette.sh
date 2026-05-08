@@ -4,6 +4,7 @@ set -euo pipefail
 repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 palette_config="$repo_dir/rofi/command-palette.rasi"
 apps_config="$repo_dir/rofi/app-launcher.rasi"
+generated_rofi_theme="$repo_dir/themes/generated/rofi-colors.rasi"
 prefix_help="> apps  ! system  @ theme/wallpaper  # workspace  ? help"
 
 require_rofi() {
@@ -11,6 +12,17 @@ require_rofi() {
         notify-send "march launcher" "rofi is not installed" 2>/dev/null || true
         exit 1
     fi
+}
+
+ensure_generated_rofi_theme() {
+    if [[ -f "$generated_rofi_theme" ]]; then
+        return 0
+    fi
+
+    mkdir -p "$(dirname "$generated_rofi_theme")"
+    cat > "$generated_rofi_theme" <<'EOF'
+* {}
+EOF
 }
 
 pick() {
@@ -51,6 +63,7 @@ open_apps() {
 }
 
 require_rofi
+ensure_generated_rofi_theme
 selection="$(pick || true)"
 
 case "$selection" in
@@ -83,8 +96,14 @@ case "$selection" in
     "! suspend")
         systemctl suspend || loginctl suspend
         ;;
-    "@ wallpaper picker" | "@ theme picker" | "@ random wallpaper")
-        notify-send "march" "${selection#@ } is planned for a later phase" 2>/dev/null || true
+    "@ wallpaper picker")
+        "$repo_dir/scripts/wallpaper.sh" --pick
+        ;;
+    "@ random wallpaper")
+        "$repo_dir/scripts/wallpaper.sh" --random
+        ;;
+    "@ theme picker")
+        notify-send "march" "theme picker is planned after generated colors are stable" 2>/dev/null || true
         ;;
     "# workspace "*)
         workspace="${selection##* }"

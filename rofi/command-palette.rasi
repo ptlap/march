@@ -15,7 +15,7 @@ window {
     width: 600px;
     border-radius: 18px;
     padding: 12px;
-    background-color: rgba(17, 20, 28, 82%);
+    background-color: @glass-bg;
 }
 
 entry {
@@ -45,7 +45,7 @@ element {
 }
 
 element selected {
-    background-color: rgba(138, 173, 244, 26%);
+    background-color: @surface;
 }
 
 message {
