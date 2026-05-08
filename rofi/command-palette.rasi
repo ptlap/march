@@ -1,6 +1,6 @@
 configuration {
     show-icons: false;
-    font: "Inter 12";
+    font: "Inter 11";
     kb-row-up: "Up,Control+k";
     kb-row-down: "Down,Control+j";
     kb-accept-entry: "Return,KP_Enter";
@@ -10,23 +10,52 @@ configuration {
 @theme "theme.rasi"
 
 window {
-    width: 640px;
+    width: 600px;
+    border-radius: 18px;
+    padding: 12px;
+    background-color: rgba(17, 20, 28, 82%);
 }
 
 entry {
-    placeholder: "Command palette";
+    placeholder: "Type a command";
+}
+
+inputbar {
+    padding: 10px 12px;
+    border-radius: 14px;
+    background-color: rgba(255, 255, 255, 7%);
+}
+
+prompt {
+    padding: 0px 2px 0px 0px;
+    text-color: @accent;
+    font: "Inter 11";
 }
 
 listview {
-    lines: 10;
+    lines: 9;
+    spacing: 3px;
+}
+
+element {
+    padding: 7px 10px;
+    border-radius: 11px;
+}
+
+element selected {
+    background-color: rgba(138, 173, 244, 26%);
 }
 
 message {
-    padding: 8px 10px 0px 10px;
-    background-color: transparent;
+    margin: 2px 0px 0px 0px;
+    padding: 7px 10px;
+    border: 1px;
+    border-color: rgba(255, 255, 255, 8%);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 5%);
 }
 
 textbox {
     text-color: @text-dim;
-    font: "Inter 10";
+    font: "Inter 9";
 }
