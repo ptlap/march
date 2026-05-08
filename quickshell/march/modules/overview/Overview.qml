@@ -36,7 +36,17 @@ Scope {
 
             Rectangle {
                 anchors.fill: parent
-                color: "#66000000"
+                color: "#6405070d"
+
+                Rectangle {
+                    anchors.fill: parent
+                    opacity: 0.26
+                    gradient: Gradient {
+                        GradientStop { position: 0; color: "#2e8aadf4" }
+                        GradientStop { position: 0.45; color: "#120b0d12" }
+                        GradientStop { position: 1; color: "#3a000000" }
+                    }
+                }
 
                 MouseArea {
                     anchors.fill: parent

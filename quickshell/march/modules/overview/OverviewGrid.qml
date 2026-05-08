@@ -4,8 +4,6 @@ import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Wayland
 
-import "../../components" as Components
-
 Item {
     id: root
 
@@ -15,10 +13,13 @@ Item {
 
     readonly property int maxWorkspace: 10
     readonly property var visibleWorkspaces: buildVisibleWorkspaces()
+    readonly property var visibleToplevels: buildVisibleToplevels()
     readonly property int workspaceCount: Math.max(1, visibleWorkspaces.length)
     readonly property int rows: workspaceCount <= 3 ? 1 : 2
     readonly property int columns: Math.ceil(workspaceCount / rows)
-    readonly property real cellGap: 14
+    readonly property real cellGap: 6
+    readonly property real workspaceHeaderHeight: 0
+    readonly property real workspacePadding: 0
     readonly property var primaryMonitor: hyprlandData.monitors.length > 0 ? hyprlandData.monitors[0] : ({ "width": 1920, "height": 1080, "reserved": [0, 44, 0, 0], "scale": 1 })
     readonly property var primaryReserved: primaryMonitor.reserved || [0, 0, 0, 0]
     readonly property real monitorUsableWidth: Math.max(1, numberOr(primaryMonitor.width, 1920) / Math.max(0.1, numberOr(primaryMonitor.scale, 1)) - numberOr(primaryReserved[0], 0) - numberOr(primaryReserved[2], 0))
@@ -26,9 +27,11 @@ Item {
     readonly property real workspaceAspect: Math.max(1.25, Math.min(2.2, monitorUsableWidth / monitorUsableHeight))
     readonly property real availableCellWidth: (workspaceGrid.width - cellGap * (columns - 1)) / columns
     readonly property real availableCellHeight: (workspaceGrid.height - cellGap * (rows - 1)) / rows
-    readonly property real cellWidth: availableCellWidth / availableCellHeight > workspaceAspect
+    readonly property real fitCellWidth: availableCellWidth / availableCellHeight > workspaceAspect
         ? availableCellHeight * workspaceAspect
         : availableCellWidth
+    readonly property real maxCellWidth: workspaceCount <= 2 ? 760 : (workspaceCount <= 3 ? 620 : 520)
+    readonly property real cellWidth: Math.min(fitCellWidth, maxCellWidth)
     readonly property real cellHeight: cellWidth / workspaceAspect
     readonly property real actualGridWidth: columns * cellWidth + Math.max(0, columns - 1) * cellGap
     readonly property real actualGridHeight: rows * cellHeight + Math.max(0, rows - 1) * cellGap
@@ -78,6 +81,37 @@ Item {
         return root.hyprlandData.clientsForWorkspace(workspaceId)
     }
 
+    function workspaceBounds(workspaceId) {
+        const clients = root.workspaceClients(workspaceId)
+        if (clients.length === 0) {
+            return ({ "x": 0, "y": 0, "width": root.monitorUsableWidth, "height": root.monitorUsableHeight })
+        }
+
+        let minX = Number.POSITIVE_INFINITY
+        let minY = Number.POSITIVE_INFINITY
+        let maxX = Number.NEGATIVE_INFINITY
+        let maxY = Number.NEGATIVE_INFINITY
+
+        for (const client of clients) {
+            const x = client.at && client.at.length > 0 ? client.at[0] : 0
+            const y = client.at && client.at.length > 1 ? client.at[1] : 0
+            const width = client.size && client.size.length > 0 ? client.size[0] : 1
+            const height = client.size && client.size.length > 1 ? client.size[1] : 1
+
+            minX = Math.min(minX, x)
+            minY = Math.min(minY, y)
+            maxX = Math.max(maxX, x + width)
+            maxY = Math.max(maxY, y + height)
+        }
+
+        return ({
+            "x": minX,
+            "y": minY,
+            "width": Math.max(1, maxX - minX),
+            "height": Math.max(1, maxY - minY),
+        })
+    }
+
     function clientWorkspaceIndex(client) {
         if (!client || !client.workspace) return 0
 
@@ -99,7 +133,7 @@ Item {
         return root.hyprlandData.monitors.length > 0 ? root.hyprlandData.monitors[0] : ({})
     }
 
-    function visibleToplevels() {
+    function buildVisibleToplevels() {
         return ToplevelManager.toplevels.values.filter(toplevel => {
             const client = root.hyprlandData.clientForToplevel(toplevel)
             const id = client && client.workspace ? client.workspace.id : -1
@@ -107,17 +141,9 @@ Item {
         })
     }
 
-    Components.GlassIsland {
-        anchors.fill: parent
-        theme: root.theme
-        color: root.theme.glassBg
-        border.color: root.theme.glassBorder
-    }
-
     ColumnLayout {
         anchors {
             fill: parent
-            margins: 10
         }
         spacing: 0
 
@@ -145,9 +171,9 @@ Item {
                     width: root.cellWidth
                     height: root.cellHeight
                     radius: 18
-                    color: target ? root.theme.barActive : (active ? "#228aadf4" : "#14ffffff")
+                    color: target ? root.theme.barActive : (active ? "#2011141c" : "#1a11141c")
                     border.width: active || target ? 2 : 1
-                    border.color: target ? root.theme.accent : (active ? root.theme.accent2 : root.theme.glassBorder)
+                    border.color: target ? root.theme.accent : (active ? root.theme.accent : "#18ffffff")
                     antialiasing: true
 
                     Rectangle {
@@ -166,45 +192,13 @@ Item {
                     }
 
                     Text {
-                        anchors {
-                            left: parent.left
-                            top: parent.top
-                            leftMargin: 12
-                            topMargin: 8
-                        }
-                        text: workspaceCell.workspaceId
-                        color: workspaceCell.active ? root.theme.text : root.theme.textMuted
-                        font.family: root.theme.uiFont
-                        font.pixelSize: 17
-                        font.weight: Font.DemiBold
-                        opacity: workspaceCell.clients.length > 0 ? 0.55 : 0.42
-                        z: 8
-                    }
-
-                    Rectangle {
-                        anchors {
-                            right: parent.right
-                            top: parent.top
-                            rightMargin: 10
-                            topMargin: 10
-                        }
-                        width: 7
-                        height: 7
-                        radius: 4
-                        visible: workspaceCell.active
-                        color: root.theme.accent
-                        z: 8
-                    }
-
-                    Text {
                         anchors.centerIn: parent
-                        visible: workspaceCell.clients.length === 0
                         text: workspaceCell.workspaceId
                         color: root.theme.textDim
                         font.family: root.theme.uiFont
-                        font.pixelSize: 42
+                        font.pixelSize: Math.min(workspaceCell.width, workspaceCell.height) * 0.36
                         font.weight: Font.DemiBold
-                        opacity: 0.16
+                        opacity: workspaceCell.clients.length > 0 ? 0.10 : 0.18
                     }
 
                     MouseArea {
@@ -239,7 +233,7 @@ Item {
             }
 
             Repeater {
-                model: root.visibleToplevels()
+                model: root.visibleToplevels
 
                 OverviewWindow {
                     id: windowItem
@@ -256,6 +250,9 @@ Item {
                     workspaceIndex: root.workspaceVisualIndex(windowItem.workspaceId)
                     gridOffsetX: root.gridOffsetX
                     gridOffsetY: root.gridOffsetY
+                    workspaceHeaderHeight: root.workspaceHeaderHeight
+                    workspacePadding: root.workspacePadding
+                    workspaceBounds: root.workspaceBounds(windowItem.workspaceId)
                     monitorData: root.monitorForClient(windowItem.client)
                     overviewOpen: root.overviewOpen
                     z: dragArea.drag.active ? 20 : 4

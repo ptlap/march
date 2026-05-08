@@ -15,6 +15,9 @@ Rectangle {
     required property int workspaceIndex
     required property real gridOffsetX
     required property real gridOffsetY
+    required property real workspaceHeaderHeight
+    required property real workspacePadding
+    required property var workspaceBounds
     required property var monitorData
     required property bool overviewOpen
 
@@ -24,9 +27,9 @@ Rectangle {
     readonly property real workspaceX: gridOffsetX + workspaceColumn * (cellWidth + cellGap)
     readonly property real workspaceY: gridOffsetY + workspaceRow * (cellHeight + cellGap)
     readonly property real topInset: 0
-    readonly property real sideInset: 0
+    readonly property real sideInset: workspacePadding
     readonly property real previewWidth: Math.max(1, cellWidth - sideInset * 2)
-    readonly property real previewHeight: Math.max(1, cellHeight - topInset - sideInset)
+    readonly property real previewHeight: Math.max(1, cellHeight - topInset - workspacePadding)
     readonly property real monitorX: numberOr(monitorData.x, 0)
     readonly property real monitorY: numberOr(monitorData.y, 0)
     readonly property real monitorWidth: Math.max(1, numberOr(monitorData.width, 1920) / Math.max(0.1, numberOr(monitorData.scale, 1)))
@@ -40,15 +43,19 @@ Rectangle {
     readonly property real clientY: client.at && client.at.length > 1 ? client.at[1] : usableY
     readonly property real clientWidth: client.size && client.size.length > 0 ? client.size[0] : usableWidth
     readonly property real clientHeight: client.size && client.size.length > 1 ? client.size[1] : usableHeight
+    readonly property real monitorScale: Math.min(previewWidth / usableWidth, previewHeight / usableHeight)
+    readonly property real monitorOffsetX: Math.max(0, (previewWidth - usableWidth * monitorScale) / 2)
+    readonly property real monitorOffsetY: Math.max(0, (previewHeight - usableHeight * monitorScale) / 2)
     readonly property string windowClass: client.class || client.initialClass || ""
     readonly property string windowTitle: client.title || windowClass || "Window"
+    readonly property string iconSource: Quickshell.iconPath(iconName(windowClass), "application-x-executable")
     property bool hovered: false
     property bool pressed: false
 
-    width: Math.max(88, Math.min(previewWidth, clientWidth / usableWidth * previewWidth))
-    height: Math.max(54, Math.min(previewHeight, clientHeight / usableHeight * previewHeight))
-    x: workspaceX + sideInset + Math.max(0, Math.min(previewWidth - width, (clientX - usableX) / usableWidth * previewWidth))
-    y: workspaceY + topInset + Math.max(0, Math.min(previewHeight - height, (clientY - usableY) / usableHeight * previewHeight))
+    width: Math.max(88, Math.min(previewWidth, clientWidth * monitorScale))
+    height: Math.max(54, Math.min(previewHeight, clientHeight * monitorScale))
+    x: workspaceX + sideInset + monitorOffsetX + (clientX - usableX) * monitorScale
+    y: workspaceY + topInset + monitorOffsetY + (clientY - usableY) * monitorScale
     radius: 12
     color: "#00000000"
     border.width: 1
@@ -56,11 +63,11 @@ Rectangle {
     antialiasing: true
     clip: true
     opacity: overviewOpen ? 1 : 0
-    scale: pressed ? 0.985 : (hovered ? 1.018 : 1)
+    scale: pressed ? 0.985 : 1
 
     function resetPosition() {
-        root.x = Qt.binding(() => root.workspaceX + root.sideInset + Math.max(0, Math.min(root.previewWidth - root.width, (root.clientX - root.usableX) / root.usableWidth * root.previewWidth)))
-        root.y = Qt.binding(() => root.workspaceY + root.topInset + Math.max(0, Math.min(root.previewHeight - root.height, (root.clientY - root.usableY) / root.usableHeight * root.previewHeight)))
+        root.x = Qt.binding(() => root.workspaceX + root.sideInset + root.monitorOffsetX + (root.clientX - root.usableX) * root.monitorScale)
+        root.y = Qt.binding(() => root.workspaceY + root.topInset + root.monitorOffsetY + (root.clientY - root.usableY) * root.monitorScale)
     }
 
     function numberOr(value, fallback) {
@@ -99,7 +106,7 @@ Rectangle {
         }
         width: Math.max(18, Math.min(34, Math.min(root.width, root.height) * 0.18))
         height: width
-        source: Quickshell.iconPath(root.iconName(root.windowClass), "application-x-executable")
+        source: root.iconSource
         fillMode: Image.PreserveAspectFit
         smooth: true
     }

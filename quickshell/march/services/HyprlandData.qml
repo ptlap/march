@@ -12,12 +12,20 @@ Item {
     property var clientsByAddress: ({})
     property var workspacesById: ({})
     property var activeWorkspace: ({ "id": 1 })
+    property bool refreshQueued: false
 
     function refresh() {
+        refreshQueued = false
         clientsProcess.exec(["hyprctl", "-j", "clients"])
         monitorsProcess.exec(["hyprctl", "-j", "monitors"])
         workspacesProcess.exec(["hyprctl", "-j", "workspaces"])
         activeWorkspaceProcess.exec(["hyprctl", "-j", "activeworkspace"])
+    }
+
+    function queueRefresh() {
+        if (refreshQueued) return
+        refreshQueued = true
+        refreshTimer.restart()
     }
 
     function clientForAddress(address) {
@@ -75,9 +83,17 @@ Item {
 
         function onRawEvent(event) {
             if (!event || !event.name) return
-            if (event.name === "openlayer" || event.name === "closelayer") return
-            root.refresh()
+            if (["openlayer", "closelayer", "screencast", "mouse"].includes(event.name)) return
+            root.queueRefresh()
         }
+    }
+
+    Timer {
+        id: refreshTimer
+
+        interval: 120
+        repeat: false
+        onTriggered: root.refresh()
     }
 
     Process {
