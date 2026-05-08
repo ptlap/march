@@ -11,16 +11,19 @@ RowLayout {
     readonly property int activeWorkspace: Hyprland.focusedMonitor && Hyprland.focusedMonitor.activeWorkspace
         ? Hyprland.focusedMonitor.activeWorkspace.id : 1
     property var workspaceApps: ({})
+    readonly property int maxWorkspace: 10
+    readonly property int neighborRange: 1
+    readonly property var visibleWorkspaces: buildVisibleWorkspaces()
 
     spacing: 2
 
     Repeater {
-        model: 5
+        model: root.visibleWorkspaces
 
         Rectangle {
             id: button
 
-            readonly property int workspaceId: index + 1
+            readonly property int workspaceId: modelData
             readonly property bool active: workspaceId === root.activeWorkspace
             readonly property string appIcon: root.workspaceApps[workspaceId] || ""
             readonly property bool occupied: appIcon.length > 0 || Hyprland.workspaces.values.some(ws => ws.id === workspaceId)
@@ -65,6 +68,29 @@ RowLayout {
 
     function refreshClients() {
         readClients.exec(["bash", "-lc", "hyprctl clients -j 2>/dev/null || true"])
+    }
+
+    function buildVisibleWorkspaces() {
+        const ids = new Set()
+        const active = Math.max(1, Math.min(root.maxWorkspace, root.activeWorkspace))
+
+        ids.add(1)
+        ids.add(active)
+
+        for (let id = active - root.neighborRange; id <= active + root.neighborRange; id++) {
+            if (id >= 1 && id <= root.maxWorkspace) ids.add(id)
+        }
+
+        for (const ws of Hyprland.workspaces.values) {
+            if (ws.id >= 1 && ws.id <= root.maxWorkspace) ids.add(ws.id)
+        }
+
+        for (const key of Object.keys(root.workspaceApps)) {
+            const id = Number(key)
+            if (id >= 1 && id <= root.maxWorkspace) ids.add(id)
+        }
+
+        return Array.from(ids).sort((a, b) => a - b)
     }
 
     function iconForClient(client) {
@@ -113,7 +139,7 @@ RowLayout {
                     const next = {}
                     for (const client of clients) {
                         const workspaceId = client.workspace ? client.workspace.id : undefined
-                        if (typeof workspaceId === "number" && workspaceId > 0 && workspaceId <= 5 && !next[workspaceId]) {
+                        if (typeof workspaceId === "number" && workspaceId > 0 && workspaceId <= root.maxWorkspace && !next[workspaceId]) {
                             next[workspaceId] = root.iconForClient(client)
                         }
                     }
